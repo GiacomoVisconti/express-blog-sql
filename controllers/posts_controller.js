@@ -101,27 +101,25 @@ function store(req, res) {
 function update(req, res) {
     const id = parseInt(req.params.id) ;
 
-    console.log(posts);
+    const {title, content, image} = req.body
+    const sql = "UPDATE boolean_db_posts.posts SET title = ?, content = ?, image = ? WHERE id = ?"
     
-    //finding the post with the specified ID
-    const post = posts.find( post => post.id === id)
+    connection.query(sql, [title, content, image, id], (err, results) => {
+        if(err){
+            console.log(err);
+            
+            return res.status(500).json({
+                error: 'Database query failed'
+            })
+        }
 
-    //If the post is not found, return a 404 error
-    if(!post){
-        res.status(404)
-        return res.json({
-            error: 'True',
-            message:`The post with ID: ${id} is not present`
+        console.log(results);
+        
+        res.status(204).json({
+            message: 'Record added successfully'
         })
-    }
-
-    //If the post is found, update the post with the data from the request body
-    post.title = req.body.title
-    post.content = req.body.content
-    post.image = req.body.image
-    post.tags = req.body.tags
-    res.status(201).send('Elemento modificato correttamente')
-    console.log(posts, post);
+        
+    })
     
     
 }
