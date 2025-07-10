@@ -1,31 +1,24 @@
-const posts = require('../data/db')
+//Import connections methods
+// const posts = require('../data/db')
+const connection = require('../data/db')
 
 //Create the functions for the CRUD operations
-
-
 function index(req, res) {
 
-    let filtered_posts = posts
-
-    //filtering posts from tags, IF is present
-    if(req.query.tag){
-        filtered_posts = posts.filter(element => element.tags.includes(req.query.tag))
-    }
-    
-    //Control the filtered post
-    if(filtered_posts.length === 0){
-        return res.status(404).json({
-            error: 'True',
-            message: 'No posts found with the specified tag'
-        })  
-    } 
-    
-    res.json(filtered_posts)
+    //Save the query string into a variable
+   const sql = 'SELECT * FROM posts'
     
     
-
-
-
+    connection.query(sql, (err, results) => {
+        if(err){
+            return res.status(500).json({
+                error: 'Database query failed'
+            })
+        }
+        console.log(results);
+        
+        res.json(results)
+    })
     
 }
 

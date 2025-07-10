@@ -1,6 +1,8 @@
-
+//Import the mysql2 methods
 const mysql = require('mysql2')
 
+
+//Declare the credentials for DB connection
 const credentials = {
   host: 'localhost',
   user: 'root',
@@ -8,29 +10,19 @@ const credentials = {
   database: 'boolean_db_posts'
 }
 
+//create a variable for connect
 const connection = mysql.createConnection(credentials)
 
+//Connection to DB and set the initial operations 
 connection.connect((err) => {
   if(err){
     throw err
   } 
   console.log('Connected to DB');
 
-  module.exports = connection
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = connection
 
 
 /* const posts = [
