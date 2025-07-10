@@ -26,19 +26,26 @@ function index(req, res) {
 function show(req, res) {
     const id = parseInt(req.params.id) ;
 
-    //finding the post with the specified ID
-    const post = posts.find( post => post.id === id)
+    //Save the query string into a variable and use the sql injection protection
+    const sql = 'SELECT * FROM posts WHERE id = ?'
+    
+    connection.query(sql, [id], (err, results) => {
+        if(err){
+            return res.status(500).json({
+                error: 'Database query failed'
+            })
+        }
+        if(!results.length > 0){
+            return res.status(404).json({
+                error: 'true',
+                message: 'Record not found'
+            })
+        }
+        console.log(results);
+        
+        res.json(results)
+    })
 
-    //If the post is not found, return a 404 error
-    if(!post){
-        res.status(404)
-        return res.json({
-            error: 'True',
-            message:`The post with ID: ${id} is not present`
-        })
-    }
-
-    res.json(post)
 }
 
 
