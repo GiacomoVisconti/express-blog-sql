@@ -52,24 +52,25 @@ function show(req, res) {
 function destroy(req, res) {
     const id = parseInt(req.params.id) ;
 
-    console.log(posts);
+    //Save the query string into a variable and use the sql injection protection
+    const sql = 'DELETE FROM posts WHERE id = ?'
     
-    //finding the post with the specified ID
-    const post = posts.find( post => post.id === id)
-    
-    //If the post is not found, return a 404 error
-    if(!post){
-        res.status(404)
-        return res.json({
-            error: 'True',
-            message:`The post with ID: ${id} is not present`
-        })
-    }
+    connection.query(sql, [id], (err, results) => {
+        if(err){
+            console.log(err);
+            
+            return res.status(500).json({
+                error: 'Database query failed'
+            })
+        }
 
-    posts.splice(posts.indexOf(post), 1)
-    console.log(posts);
-    
-    res.sendStatus(204)
+        console.log(results);
+        
+        res.status(204).json({
+            message: 'Record removed successfully'
+        })
+        
+    })
 }
 
 
