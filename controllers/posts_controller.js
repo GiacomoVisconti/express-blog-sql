@@ -75,31 +75,25 @@ function destroy(req, res) {
 
 
 function store(req, res) {
+    const {title, content, image} = req.body
+    const sql = "INSERT INTO boolean_db_posts.posts (title, content, image) VALUES (?, ?, ?)"
     
-    console.log(req.body);
+    connection.query(sql, [title, content, image], (err, results) => {
+        if(err){
+            console.log(err);
+            
+            return res.status(500).json({
+                error: 'Database query failed'
+            })
+        }
 
-    //setting the ID of the new post taking the last ID of the posts array and adding 1
-    const new_id = posts[posts.length - 1].id + 1
-    
-    //Setting the new post object with the data from the request body
-    const new_object = {
-        id: new_id,
-        title: req.body.title,
-        content: req.body.content,
-        image: req.body.image,
-        tags: req.body.tags,
-
-    }
-    
-    //Pushing the new post object into the posts array
-    posts.push(new_object)
-
-    //Returning a 201 status code and a success message
-    res.status(201).send('Elemento aggiunto correttamente')
-
-    console.log(new_object, posts);
-
-    
+        console.log(results);
+        
+        res.status(204).json({
+            message: 'Record added successfully'
+        })
+        
+    })
     
 }
 
