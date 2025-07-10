@@ -1,4 +1,39 @@
-const posts = [
+
+const mysql = require('mysql2')
+
+const credentials = {
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'boolean_db_posts'
+}
+
+const connection = mysql.createConnection(credentials)
+
+connection.connect((err) => {
+  if(err){
+    throw err
+  } 
+  console.log('Connected to DB');
+
+  module.exports = connection
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* const posts = [
   {
     id: 1,
     title: "Ciambellone",
@@ -44,4 +79,8 @@ const posts = [
   },
 ];
 
-module.exports = posts;
+module.exports = posts; */
+
+
+
+
